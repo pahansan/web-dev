@@ -4,6 +4,7 @@ namespace WebApplication1.Models
 {
     public class Valera
     {
+        public int Id { get; set; }
         public int Health { get; private set; }
         public int Mana { get; private set; }
         public int Happiness { get; private set; }
