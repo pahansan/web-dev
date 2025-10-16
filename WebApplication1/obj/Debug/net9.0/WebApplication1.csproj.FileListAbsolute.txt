@@ -154,3 +154,6 @@
 /home/pahansan/code/web-dev/WebApplication1/bin/Debug/net9.0/runtimes/win-x64/native/e_sqlite3.dll
 /home/pahansan/code/web-dev/WebApplication1/bin/Debug/net9.0/runtimes/win-x86/native/e_sqlite3.dll
 /home/pahansan/code/web-dev/WebApplication1/obj/Debug/net9.0/WebApplication1.sourcelink.json
+/home/pahansan/code/web-dev/WebApplication1/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/home/pahansan/code/web-dev/WebApplication1/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/home/pahansan/code/web-dev/WebApplication1/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
