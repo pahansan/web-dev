@@ -1,6 +1,5 @@
 using WebApplication1.Models;
 using WebApplication1.Data;
-using WebApplication1.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApplication1.Services
@@ -19,8 +18,9 @@ namespace WebApplication1.Services
             return await _context.Valeras.FirstOrDefaultAsync(v => v.Id == id);
         }
 
-        public async Task<Valera> CreateValeraAsync(Valera valera)
+        public async Task<Valera> CreateValeraAsync()
         {
+            var valera = new Valera();
             _context.Valeras.Add(valera);
             await _context.SaveChangesAsync();
             return valera;

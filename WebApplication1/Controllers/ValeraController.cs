@@ -24,9 +24,9 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Valera>> Create(Valera valera)
+        public async Task<ActionResult<Valera>> Create()
         {
-            var newValera = await _valeraService.CreateValeraAsync(valera);
+            var newValera = await _valeraService.CreateValeraAsync();
             return CreatedAtAction(nameof(Get), new { id = newValera.Id }, newValera);
         }
 
