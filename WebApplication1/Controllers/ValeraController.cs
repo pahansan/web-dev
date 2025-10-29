@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Services;
 using WebApplication1.Models;
+using WebApplication1.DTOs;
 
 namespace WebApplication1.Controllers
 {
@@ -30,58 +31,71 @@ namespace WebApplication1.Controllers
             return CreatedAtAction(nameof(Get), new { id = newValera.Id }, newValera);
         }
 
-        [HttpPost("{id}/action")]
-        public async Task<ActionResult<Valera>> DoAction(int id, [FromBody] ValeraAction action)
+        [HttpPost("{id}/action/gowork")]
+        public async Task<ActionResult<Valera>> GoWork(int id)
         {
             var valera = await _valeraService.GetValeraAsync(id);
             if (valera == null) return NotFound();
-
-            switch (action)
+            var result = await _valeraService.GoWorkAsync(valera);
+            if (!result.Item2)
             {
-                case ValeraAction.GoWork:
-                    var success = valera.GoWork();
-                    if (!success)
-                        return BadRequest(new { message = "Valera is too tired or doesn't have enough mana to work." });
-                    break;
-
-                case ValeraAction.LookForNature:
-                    valera.LookForNature();
-                    break;
-
-                case ValeraAction.DrinkWineAndWatchTV:
-                    valera.DrinkWineAndWatchTV();
-                    break;
-
-                case ValeraAction.GoToBar:
-                    valera.GoToBar();
-                    break;
-
-                case ValeraAction.DrinkWithMarginals:
-                    valera.DrinkWithMarginals();
-                    break;
-
-                case ValeraAction.SingInSubway:
-                    valera.SingInSubway();
-                    break;
-
-                case ValeraAction.Sleep:
-                    valera.Sleep();
-                    break;
-
-                default:
-                    return BadRequest($"Unknown action: {action}");
+                return BadRequest(new { message = "Valera is too tired or doesn't have enough mana to work." });
             }
+            return Ok(result.Item1);
+        }
 
-            await _valeraService.UpdateValeraAsync(valera);
+        [HttpPost("{id}/action/lookfornature")]
+        public async Task<ActionResult<Valera>> LookForNature(int id)
+        {
+            var valera = await _valeraService.GetValeraAsync(id);
+            if (valera == null) return NotFound();
+            await _valeraService.LookForNatureAsync(valera);
             return Ok(valera);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Valera valera)
+        [HttpPost("{id}/action/drinkwineandwatchtv")]
+        public async Task<ActionResult<Valera>> DrinkWineAndWatchTV(int id)
         {
-            if (id != valera.Id) return BadRequest();
-            await _valeraService.UpdateValeraAsync(valera);
-            return NoContent();
+            var valera = await _valeraService.GetValeraAsync(id);
+            if (valera == null) return NotFound();
+            await _valeraService.DrinkWineAndWatchTVAsync(valera);
+            return Ok(valera);
+        }
+
+        [HttpPost("{id}/action/gotobar")]
+        public async Task<ActionResult<Valera>> GoToBar(int id)
+        {
+            var valera = await _valeraService.GetValeraAsync(id);
+            if (valera == null) return NotFound();
+            await _valeraService.GoToBarAsync(valera);
+            return Ok(valera);
+        }
+
+        [HttpPost("{id}/action/drinkwithmarginals")]
+        public async Task<ActionResult<Valera>> DrinkWithMarginals(int id)
+        {
+            var valera = await _valeraService.GetValeraAsync(id);
+            if (valera == null) return NotFound();
+            await _valeraService.DrinkWithMarginalsAsync(valera);
+            return Ok(valera);
+        }
+
+        [HttpPost("{id}/action/singinsubway")]
+        public async Task<ActionResult<Valera>> SingInSubway(int id)
+        {
+            var valera = await _valeraService.GetValeraAsync(id);
+            if (valera == null) return NotFound();
+            await _valeraService.SingInSubwayAsync(valera);
+            return Ok(valera);
+        }
+
+        [HttpPost("{id}/action/sleep")]
+        public async Task<ActionResult<Valera>> Sleep(int id)
+        {
+            var valera = await _valeraService.GetValeraAsync(id);
+            if (valera == null) return NotFound();
+            await _valeraService.SleepAsync(valera);
+            return Ok(valera);
         }
 
         [HttpDelete("{id}")]

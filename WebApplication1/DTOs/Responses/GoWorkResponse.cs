@@ -1,6 +1,7 @@
+using WebApplication1.Models;
 namespace WebApplication1.DTOs;
 
 public class GoWorkResponse
 {
-    public ValeraState? state { get; set; }
+    public Valera valera { get; set; } = default!;
 }
