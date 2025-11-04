@@ -10,7 +10,7 @@ namespace ValeraSan.Models
         public int Happiness { get; private set; }
         public int Tiredness { get; private set; }
         public int Money { get; private set; }
-
+        public string Name { get; private set; }
         private const int MinHealth = 0;
         private const int MaxHealth = 100;
         private const int MinMana = 0;
@@ -20,13 +20,36 @@ namespace ValeraSan.Models
         private const int MinTiredness = 0;
         private const int MaxTiredness = 100;
 
-        public Valera()
+        public Valera(string name, int health, int mana, int happiness, int tiredness, int money)
         {
-            Health = 100;
+            if (name == "")
+                name = "Valera";
+            Name = name;
+            Health = 0;
+            if (health > 0)
+                UpHealth(health);
+            if (health < 0)
+                DownHealth(-health);
             Mana = 0;
+            if (mana > 0)
+                UpMana(mana);
+            if (mana < 0)
+                DownMana(-mana);
             Happiness = 0;
+            if (happiness > 0)
+                UpHappiness(happiness);
+            if (happiness < 0)
+                DownHappiness(-happiness);
             Tiredness = 0;
-            Money = 100;
+            if (tiredness > 0)
+                UpTiredness(tiredness);
+            if (tiredness < 0)
+                DownTiredness(-tiredness);
+            Money = 0;
+            if (money > 0)
+                UpMoney(money);
+            if (money < 0)
+                DownMoney(-money);
         }
         private void DownHealth(int diff)
         {

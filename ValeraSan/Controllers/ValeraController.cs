@@ -25,13 +25,13 @@ namespace ValeraSan.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Valera>> Create()
+        public async Task<ActionResult<Valera>> Create([FromBody] CreateRequest req)
         {
-            var newValera = await _valeraService.CreateValeraAsync();
+            var newValera = await _valeraService.CreateValeraAsync(req);
             return CreatedAtAction(nameof(Get), new { id = newValera.Id }, newValera);
         }
 
-        [HttpPost("{id}/action/gowork")]
+        [HttpPost("{id}/gowork")]
         public async Task<ActionResult<Valera>> GoWork(int id)
         {
             var valera = await _valeraService.GetValeraAsync(id);
@@ -44,7 +44,7 @@ namespace ValeraSan.Controllers
             return Ok(result.Item1);
         }
 
-        [HttpPost("{id}/action/lookfornature")]
+        [HttpPost("{id}/lookfornature")]
         public async Task<ActionResult<Valera>> LookForNature(int id)
         {
             var valera = await _valeraService.GetValeraAsync(id);
@@ -53,7 +53,7 @@ namespace ValeraSan.Controllers
             return Ok(valera);
         }
 
-        [HttpPost("{id}/action/drinkwineandwatchtv")]
+        [HttpPost("{id}/drinkwineandwatchtv")]
         public async Task<ActionResult<Valera>> DrinkWineAndWatchTV(int id)
         {
             var valera = await _valeraService.GetValeraAsync(id);
@@ -62,7 +62,7 @@ namespace ValeraSan.Controllers
             return Ok(valera);
         }
 
-        [HttpPost("{id}/action/gotobar")]
+        [HttpPost("{id}/gotobar")]
         public async Task<ActionResult<Valera>> GoToBar(int id)
         {
             var valera = await _valeraService.GetValeraAsync(id);
@@ -71,7 +71,7 @@ namespace ValeraSan.Controllers
             return Ok(valera);
         }
 
-        [HttpPost("{id}/action/drinkwithmarginals")]
+        [HttpPost("{id}/drinkwithmarginals")]
         public async Task<ActionResult<Valera>> DrinkWithMarginals(int id)
         {
             var valera = await _valeraService.GetValeraAsync(id);
@@ -80,7 +80,7 @@ namespace ValeraSan.Controllers
             return Ok(valera);
         }
 
-        [HttpPost("{id}/action/singinsubway")]
+        [HttpPost("{id}/singinsubway")]
         public async Task<ActionResult<Valera>> SingInSubway(int id)
         {
             var valera = await _valeraService.GetValeraAsync(id);
@@ -89,7 +89,7 @@ namespace ValeraSan.Controllers
             return Ok(valera);
         }
 
-        [HttpPost("{id}/action/sleep")]
+        [HttpPost("{id}/sleep")]
         public async Task<ActionResult<Valera>> Sleep(int id)
         {
             var valera = await _valeraService.GetValeraAsync(id);

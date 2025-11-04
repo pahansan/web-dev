@@ -1,3 +1,4 @@
+using ValeraSan.DTOs;
 using ValeraSan.Models;
 using ValeraSan.Data;
 using Microsoft.EntityFrameworkCore;
@@ -18,9 +19,11 @@ namespace ValeraSan.Services
             return await _context.Valeras.FirstOrDefaultAsync(v => v.Id == id);
         }
 
-        public async Task<Valera> CreateValeraAsync()
+        public async Task<Valera> CreateValeraAsync(CreateRequest req)
         {
-            var valera = new Valera();
+            var name = req.Name;
+            var state = req.State;
+            var valera = new Valera(name, state.Health, state.Mana, state.Happiness, state.Tiredness, state.Money);
             _context.Valeras.Add(valera);
             await _context.SaveChangesAsync();
             return valera;

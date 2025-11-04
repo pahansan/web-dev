@@ -2,5 +2,6 @@ namespace ValeraSan.DTOs;
 
 public class CreateRequest
 {
-    // empty
+    public string Name { get; set; } = default!;
+    public ValeraState State { get; set; } = default!;
 }
