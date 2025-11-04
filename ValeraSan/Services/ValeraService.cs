@@ -19,6 +19,11 @@ namespace ValeraSan.Services
             return await _context.Valeras.FirstOrDefaultAsync(v => v.Id == id);
         }
 
+        public async Task<List<Valera>> GetAllValerasAsync()
+        {
+            return await _context.Valeras.ToListAsync();
+        }
+
         public async Task<Valera> CreateValeraAsync(CreateRequest req)
         {
             var name = req.Name;

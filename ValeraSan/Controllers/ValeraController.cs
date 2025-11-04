@@ -24,9 +24,20 @@ namespace ValeraSan.Controllers
             return Ok(valera);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<Valera>>> GetAll()
+        {
+            var valeras = await _valeraService.GetAllValerasAsync();
+            return Ok(valeras);
+        }
+
         [HttpPost]
         public async Task<ActionResult<Valera>> Create([FromBody] CreateRequest req)
         {
+            if (req == null)
+            {
+                return BadRequest(new { message = "Missed data" });
+            }
             var newValera = await _valeraService.CreateValeraAsync(req);
             return CreatedAtAction(nameof(Get), new { id = newValera.Id }, newValera);
         }
