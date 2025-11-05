@@ -218,7 +218,7 @@ export default function ValeraList() {
                 fontSize: '14px'
               }}
             >
-              Удалить
+              Delete
             </button>
           </li>
         ))}

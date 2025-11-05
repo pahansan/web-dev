@@ -3,20 +3,63 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 
-// Отображение параметра как прогресс-бар
-function ProgressBar({ label, value, max = 100, color = '#4CAF50' }) {
-  const percent = Math.max(0, Math.min(100, (value / max) * 100));
-  return (
-    <div style={{ marginBottom: '10px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '14px' }}>
-        <span>{label}</span>
-        <span>{value}</span>
+function ProgressBar({ label, value, min = 0, max = 100, color = '#4CAF50', isCentered = false }) {
+  if (!isCentered) {
+    const percent = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
+    return (
+      <div style={{ marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '500', fontSize: '14px', marginBottom: '6px' }}>
+          <span>{label}</span>
+          <span>{value}</span>
+        </div>
+        <div style={{ height: '14px', background: 'rgba(255,255,255,0.2)', borderRadius: '8px', overflow: 'hidden' }}>
+          <div style={{
+            width: `${percent}%`,
+            height: '100%',
+            background: color,
+            transition: 'width 0.3s ease'
+          }} />
+        </div>
       </div>
-      <div style={{ height: '12px', backgroundColor: '#eee', borderRadius: '4px', overflow: 'hidden' }}>
-        <div style={{ height: '100%', width: `${percent}%`, backgroundColor: color }} />
+    );
+  } else {
+    // Для двустороннего centered-прогресс-бара
+    const percent = ((value - min) / (max - min)) * 100; // от 0 до 100
+    const center = 50; // 0 в середине
+    let leftPercent = 0, rightPercent = 0;
+
+    if (percent < center) leftPercent = center - percent;
+    else rightPercent = percent - center;
+
+    return (
+      <div style={{ marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontWeight: '500', fontSize: '14px', marginBottom: '6px' }}>
+          <span>{label}</span>
+          <span>{value}</span>
+        </div>
+        <div style={{ height: '14px', background: 'rgba(255,255,255,0.2)', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
+          {/* левая часть (отрицательное) */}
+          <div style={{
+            position: 'absolute',
+            left: `${50 - leftPercent}%`,
+            width: `${leftPercent}%`,
+            height: '100%',
+            background: '#F44336',
+            transition: 'width 0.3s ease, left 0.3s ease'
+          }} />
+          {/* правая часть (положительное) */}
+          <div style={{
+            position: 'absolute',
+            left: '50%',
+            width: `${rightPercent}%`,
+            height: '100%',
+            background: '#FFC107',
+            transition: 'width 0.3s ease'
+          }} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default function ValeraStats() {
@@ -33,57 +76,78 @@ export default function ValeraStats() {
   const doAction = async (action) => {
     try {
       await api.performAction(id, action);
-      loadValera(); // обновить данные
+      loadValera();
     } catch (err) {
       alert('Ошибка: ' + err.message);
     }
   };
 
-  if (!valera) return <div style={{ padding: '20px' }}>Загрузка...</div>;
+  if (!valera) return <div style={{ padding: '20px', textAlign: 'center', color: 'white' }}>Загрузка...</div>;
 
-  // Проверка возможности работать
   const canWork = valera.mana < 50 && valera.tiredness < 10;
 
-  // Маппинг действий: кнопка → маршрут
   const actions = [
-    { key: 'gowork', label: 'Пойти на работу', disabled: !canWork },
-    { key: 'lookfornature', label: 'Созерцать природу' },
-    { key: 'drinkwineandwatchtv', label: 'Пить вино и смотреть сериал' },
-    { key: 'gotobar', label: 'Сходить в бар' },
-    { key: 'drinkwithmarginals', label: 'Выпить с маргинальными личностями' },
-    { key: 'singinsubway', label: 'Петь в метро' },
-    { key: 'sleep', label: 'Спать' },
+    { key: 'gowork', label: 'Go work', disabled: !canWork },
+    { key: 'lookfornature', label: 'Look for nature' },
+    { key: 'drinkwineandwatchtv', label: 'Drink wine and watch TV' },
+    { key: 'gotobar', label: 'Go to bar' },
+    { key: 'drinkwithmarginals', label: 'Drink with marginals' },
+    { key: 'singinsubway', label: 'Sing in subway' },
+    { key: 'sleep', label: 'Sleep' },
   ];
 
+  const buttonStyle = {
+    padding: '10px',
+    borderRadius: '12px',
+    fontWeight: '500',
+    color: 'white',
+    border: 'none',
+    cursor: 'pointer',
+    transition: '0.2s'
+  };
+
   return (
-    <div style={{ padding: '20px', maxWidth: '600px', margin: '0 auto' }}>
-      <button onClick={() => navigate('/valera')} style={{ marginBottom: '16px', color: '#2196F3' }}>
-        ← Назад к списку
+    <div style={{
+      maxWidth: '600px',
+      margin: '0 auto',
+      padding: '24px',
+      background: 'rgba(255,255,255,0.05)',
+      backdropFilter: 'blur(10px)',
+      borderRadius: '20px',
+      boxShadow: '0 8px 24px rgba(0,0,0,0.2)',
+      color: 'white'
+    }}>
+      <button
+        onClick={() => navigate('/valera')}
+        style={{ marginBottom: '20px', background: 'transparent', border: 'none', color: '#2196F3', cursor: 'pointer', fontWeight: '500', fontSize: '16px' }}
+      >
+        ← Back to list
       </button>
-      <h2>{valera.name}</h2>
 
-      <ProgressBar label="Здоровье" value={valera.health} max={100} color="#4CAF50" />
-      <ProgressBar label="Алкоголь (мана)" value={valera.mana} max={100} color="#9C27B0" />
-      <ProgressBar label="Жизнерадостность" value={valera.happiness + 10} max={20} color="#FFC107" />
-      <ProgressBar label="Усталость" value={valera.tiredness} max={100} color="#F44336" />
-      <div style={{ fontSize: '18px', marginTop: '10px' }}>Деньги: 💰 {valera.money}</div>
+      <h2 style={{ fontSize: '28px', fontWeight: '700', marginBottom: '24px', textAlign: 'center' }}>{valera.name}</h2>
 
-      <div style={{ marginTop: '24px' }}>
-        <h3>Действия:</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '10px' }}>
+      <ProgressBar label="Health" value={valera.health} color="#4CAF50" />
+      <ProgressBar label="Mana (Alcohol)" value={valera.mana} color="#9C27B0" />
+      <ProgressBar label="Happiness" value={valera.happiness} min={-10} max={10} color="#4CAF50" isCentered />
+      <ProgressBar label="Tiredness" value={valera.tiredness} color="#F44336" />
+
+      <div style={{ fontSize: '18px', marginTop: '16px', fontWeight: '500' }}>Money: 💲 {valera.money}</div>
+
+      <div style={{ marginTop: '32px' }}>
+        <h3 style={{ marginBottom: '16px', fontSize: '20px', fontWeight: '600' }}>Actions:</h3>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
           {actions.map(a => (
             <button
               key={a.key}
               onClick={() => doAction(a.key)}
               disabled={a.disabled}
               style={{
-                padding: '10px',
-                backgroundColor: a.disabled ? '#ccc' : '#3F51B5',
-                color: 'white',
-                border: 'none',
-                borderRadius: '4px',
-                cursor: a.disabled ? 'not-allowed' : 'pointer',
+                ...buttonStyle,
+                backgroundColor: a.disabled ? 'rgba(255,255,255,0.2)' : '#3F51B5',
+                cursor: a.disabled ? 'not-allowed' : 'pointer'
               }}
+              onMouseEnter={e => !a.disabled && (e.currentTarget.style.transform = 'scale(1.05)')}
+              onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
             >
               {a.label}
             </button>

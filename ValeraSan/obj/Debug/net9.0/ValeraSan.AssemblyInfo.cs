@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ValeraSan")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb0e814b3c1b79426229d3a4d1188d75b0c41064")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e9f8c9b37b653b9af9c0df9497b66dd3ba487d0d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ValeraSan")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ValeraSan")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
