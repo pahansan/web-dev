@@ -1,3 +1,7 @@
+document.body.style.margin = '0';
+document.body.style.padding = '0';
+document.body.style.overflowX = 'hidden';
+
 // src/main.jsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
