@@ -12,26 +12,44 @@ export default function ValeraList() {
     api.getValeras().then(setValeras);
   }, []);
 
+  const defaultValues = {
+    health: 100,
+    mana: 0,
+    happiness: 0,
+    tiredness: 0,
+    money: 1000,
+  };
+
+  const [formValues, setFormValues] = useState(defaultValues);
+
+  const updateField = (field, value) =>
+    setFormValues((prev) => ({ ...prev, [field]: Number(value) }));
+
+  const randomValera = () => {
+    setFormValues({
+      health: Math.floor(Math.random() * 101),          // 0-100
+      mana: Math.floor(Math.random() * 101),            // 0-100
+      happiness: Math.floor(Math.random() * 21) - 10,   // -10..10
+      tiredness: Math.floor(Math.random() * 101),       // 0-100
+      money: Math.floor(Math.random() * 1001),          // 0-1000
+    });
+  };
+
   const handleCreate = async (e) => {
     e.preventDefault();
     const form = e.target;
-    const name = form.name.value.trim();
-    if (!name) return;
-    const newValera = {
-      name,
-      state: {
-        health: 100,
-        mana: 0,
-        happiness: 0,
-        tiredness: 0,
-        money: 0,
-      },
-    };
-    await api.createValera(newValera);
-    form.reset();
+
+    await api.createValera({
+      name: form.name.value.trim() || "Valera",
+      state: formValues,
+    });
+
     setShowForm(false);
+    setFormValues(defaultValues);
+    form.reset();
     api.getValeras().then(setValeras);
   };
+
 
   const handleDelete = async (id, e) => {
     e.stopPropagation();
@@ -61,18 +79,91 @@ export default function ValeraList() {
         </button>
       </div>
       {showForm && (
-        <form onSubmit={handleCreate} style={{ marginBottom: '20px', padding: '12px', border: '1px solid #ccc', borderRadius: '16px' }}>
-          <input name="name" placeholder="New name for Valera" required style={{ padding: '6px', marginRight: '10px', borderRadius: '16px', border: 'none' }} />
-          <button type="submit" style={{ padding: '6px 12px', backgroundColor: '#2196F3', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '16px' }}>
+        <form
+          onSubmit={handleCreate}
+          style={{ marginBottom: '20px', padding: '12px', border: '1px solid #ccc', borderRadius: '16px' }}
+        >
+
+          <label style={{ color: 'white', marginRight: '8px' }}>Name:</label>
+          <input
+            name="name"
+            defaultValue="Valera"
+            style={{ padding: '6px', borderRadius: '8px', border: 'none', width: '200px' }}
+          />
+
+          <div style={{ marginTop: '12px' }}>
+            <label style={{ color: 'white' }}>Health:</label>
+            <input type="range" min="0" max="100" step="10"
+              value={formValues.health}
+              onChange={e => updateField("health", e.target.value)}
+              style={{ width: '200px' }}
+            />
+            <label style={{ color: 'white' }}>{formValues.health}</label>
+          </div>
+
+          <div style={{ marginTop: '12px' }}>
+            <label style={{ color: 'white' }}>Mana:</label>
+            <input type="range" min="0" max="100" step="10"
+              value={formValues.mana}
+              onChange={e => updateField("mana", e.target.value)}
+              style={{ width: '200px' }}
+            />
+            <label style={{ color: 'white' }}>{formValues.mana}</label>
+          </div>
+
+          <div style={{ marginTop: '12px' }}>
+            <label style={{ color: 'white' }}>Happiness: </label>
+            <input type="range" min="-10" max="10" step="1"
+              value={formValues.happiness}
+              onChange={e => updateField("happiness", e.target.value)}
+              style={{ width: '200px' }}
+            />
+            <label style={{ color: 'white' }}>{formValues.happiness}</label>
+          </div>
+
+          <div style={{ marginTop: '12px' }}>
+            <label style={{ color: 'white' }}>Tiredness:</label>
+            <input type="range" min="0" max="100" step="10"
+              value={formValues.tiredness}
+              onChange={e => updateField("tiredness", e.target.value)}
+              style={{ width: '200px' }}
+            />
+            <label style={{ color: 'white' }}>{formValues.tiredness}</label>
+          </div>
+
+          <div style={{ marginTop: '12px' }}>
+            <label style={{ color: 'white' }}>Money:</label>
+            <input type="range" min="0" max="1000" step="100"
+              value={formValues.money}
+              onChange={e => updateField("money", e.target.value)}
+              style={{ width: '200px' }}
+            />
+            <label style={{ color: 'white' }}>{formValues.money}</label>
+          </div>
+
+          <button
+            type="button"
+            onClick={randomValera}
+            style={{ marginTop: '12px', marginRight: '10px', padding: '6px 12px', background: '#673AB7', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '16px' }}
+          >
+            🎲 Random Valera
+          </button>
+
+          <button
+            type="submit"
+            style={{ padding: '6px 12px', background: '#2196F3', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '16px' }}
+          >
             Create
           </button>
+
           <button
             type="button"
             onClick={() => setShowForm(false)}
-            style={{ marginLeft: '10px', padding: '6px 12px', cursor: 'pointer', borderRadius: '16px', border: 'none', backgroundColor: '#f44336', color: 'white' }}
+            style={{ marginLeft: '10px', padding: '6px 12px', background: '#f44336', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '16px' }}
           >
             Cancel
           </button>
+
         </form>
       )}
       <ul style={{ listStyle: 'none', padding: 0 }}>
