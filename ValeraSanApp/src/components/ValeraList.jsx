@@ -1,4 +1,3 @@
-// src/components/ValeraList.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
@@ -18,7 +17,6 @@ export default function ValeraList() {
     const form = e.target;
     const name = form.name.value.trim();
     if (!name) return;
-
     const newValera = {
       name,
       state: {
@@ -29,11 +27,16 @@ export default function ValeraList() {
         money: 0,
       },
     };
-
     await api.createValera(newValera);
     form.reset();
     setShowForm(false);
-    api.getValeras().then(setValeras); // обновить список
+    api.getValeras().then(setValeras);
+  };
+
+  const handleDelete = async (id, e) => {
+    e.stopPropagation();
+    await api.deleteValera(id);
+    setValeras(prev => prev.filter(v => v.id !== id)); // если .Id в C#, то id тут верный
   };
 
   const filtered = valeras.filter(v =>
@@ -41,40 +44,37 @@ export default function ValeraList() {
   );
 
   return (
-    <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <h2>Список Валер</h2>
-
+    <div style={{ backgroundColor: '#A264C6', padding: '16px', maxWidth: '800px', margin: '0 auto', borderRadius: '16px', marginTop: '20px' }}>
+      <h2 style={{ color: 'white' }}>All Valeras</h2>
       <div style={{ marginBottom: '20px' }}>
         <input
-          placeholder="Поиск по имени"
+          placeholder="Search by name"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          style={{ padding: '6px', marginRight: '10px' }}
+          style={{ padding: '6px', marginRight: '10px', borderRadius: '16px', border: 'none' }}
         />
         <button
           onClick={() => setShowForm(true)}
-          style={{ padding: '6px 12px', backgroundColor: '#4CAF50', color: 'white', border: 'none', cursor: 'pointer' }}
+          style={{ padding: '6px 12px', backgroundColor: '#4CAF50', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '16px' }}
         >
-          Создать Валеру
+          Create new Valera
         </button>
       </div>
-
       {showForm && (
-        <form onSubmit={handleCreate} style={{ marginBottom: '20px', padding: '12px', border: '1px solid #ccc' }}>
-          <input name="name" placeholder="Имя Валеры" required style={{ padding: '6px', marginRight: '10px' }} />
-          <button type="submit" style={{ padding: '6px 12px', backgroundColor: '#2196F3', color: 'white', border: 'none', cursor: 'pointer' }}>
-            Создать
+        <form onSubmit={handleCreate} style={{ marginBottom: '20px', padding: '12px', border: '1px solid #ccc', borderRadius: '16px' }}>
+          <input name="name" placeholder="New name for Valera" required style={{ padding: '6px', marginRight: '10px', borderRadius: '16px', border: 'none' }} />
+          <button type="submit" style={{ padding: '6px 12px', backgroundColor: '#2196F3', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '16px' }}>
+            Create
           </button>
           <button
             type="button"
             onClick={() => setShowForm(false)}
-            style={{ marginLeft: '10px', padding: '6px 12px', cursor: 'pointer' }}
+            style={{ marginLeft: '10px', padding: '6px 12px', cursor: 'pointer', borderRadius: '16px', border: 'none', backgroundColor: '#f44336', color: 'white' }}
           >
-            Отмена
+            Cancel
           </button>
         </form>
       )}
-
       <ul style={{ listStyle: 'none', padding: 0 }}>
         {filtered.map(v => (
           <li
@@ -86,9 +86,29 @@ export default function ValeraList() {
               backgroundColor: '#f9f9f9',
               border: '1px solid #ddd',
               cursor: 'pointer',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              borderRadius: '16px',
             }}
           >
-            <strong>{v.name}</strong> — 💰{v.money} | 🍺{v.mana} | 😴{v.tiredness}
+            <span>
+              <strong>{v.name}</strong> — [❤️ - {v.health}][🍺 - {v.mana}][🙂 - {v.happiness}][😴 - {v.tiredness}][💲 - {v.money}]
+            </span>
+            <button
+              type="button"
+              onClick={(e) => handleDelete(v.id, e)}
+              style={{
+                padding: '6px 12px',
+                cursor: 'pointer',
+                backgroundColor: '#f44336',
+                color: 'white',
+                border: 'none',
+                borderRadius: '16px',
+              }}
+            >
+              Удалить
+            </button>
           </li>
         ))}
       </ul>

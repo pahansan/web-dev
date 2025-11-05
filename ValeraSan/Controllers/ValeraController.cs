@@ -114,7 +114,7 @@ namespace ValeraSan.Controllers
         {
             var success = await _valeraService.DeleteValeraAsync(id);
             if (!success) return NotFound();
-            return NoContent();
+            return Ok(new { deleted = true, id });
         }
     }
 }
