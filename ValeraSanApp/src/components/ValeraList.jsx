@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
 
 const randomName = () => {
-  const names = ['Valik', 'Vanya', 'Slava', 'Misha', 'Kolya', 'Oleg', 'Dima', 'Sasha'];
+  const names = ['Valik', 'Vanya', 'Slava', 'Misha', 'Kolya', 'Oleg', 'Dima', 'Sasha', 'Aboba'];
   return names[Math.floor(Math.random() * names.length)];
 };
 
@@ -111,10 +111,28 @@ export default function ValeraList() {
   };
 
   return (
-    <div style={{ background: 'linear-gradient(135deg, #A264C6, #FFC107)', padding: '24px', maxWidth: '800px', margin: '40px auto', borderRadius: '20px', color: 'white', fontFamily: 'Arial, sans-serif' }}>
-      <h2 style={{ marginBottom: '24px', textAlign: 'center', fontSize: '28px', fontWeight: '700', textShadow: '1px 1px 4px rgba(0,0,0,0.3)' }}>All Valeras</h2>
+    <div style={{
+      background: 'linear-gradient(135deg, #A264C6, #FFC107)',
+      padding: '24px',
+      maxWidth: '800px',
+      margin: '40px auto',
+      borderRadius: '20px',
+      color: 'white',
+      fontFamily: 'Arial, sans-serif'
+    }}>
+      <h2 style={{
+        marginBottom: '24px',
+        textAlign: 'center',
+        fontSize: '28px',
+        fontWeight: '700',
+        textShadow: '1px 1px 4px rgba(0,0,0,0.3)'
+      }}>All Valeras</h2>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: '24px'
+      }}>
         <input
           placeholder="Search by name..."
           value={search}
@@ -130,7 +148,11 @@ export default function ValeraList() {
         />
         <button
           onClick={() => setShowForm(true)}
-          style={{ ...buttonStyle, background: '#4CAF50', color: 'white' }}
+          style={{
+            ...buttonStyle,
+            background: '#4CAF50',
+            color: 'white'
+          }}
         >
           Create Valera
         </button>

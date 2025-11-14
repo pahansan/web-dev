@@ -1,4 +1,3 @@
-// src/components/ValeraStats.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { api } from '../services/api';
@@ -23,9 +22,8 @@ function ProgressBar({ label, value, min = 0, max = 100, color = '#4CAF50', isCe
       </div>
     );
   } else {
-    // Для двустороннего centered-прогресс-бара
-    const percent = ((value - min) / (max - min)) * 100; // от 0 до 100
-    const center = 50; // 0 в середине
+    const percent = ((value - min) / (max - min)) * 100;
+    const center = 50;
     let leftPercent = 0, rightPercent = 0;
 
     if (percent < center) leftPercent = center - percent;
@@ -38,7 +36,6 @@ function ProgressBar({ label, value, min = 0, max = 100, color = '#4CAF50', isCe
           <span>{value}</span>
         </div>
         <div style={{ height: '14px', background: 'rgba(255,255,255,0.2)', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
-          {/* левая часть (отрицательное) */}
           <div style={{
             position: 'absolute',
             left: `${50 - leftPercent}%`,
@@ -47,7 +44,6 @@ function ProgressBar({ label, value, min = 0, max = 100, color = '#4CAF50', isCe
             background: '#F44336',
             transition: 'width 0.3s ease, left 0.3s ease'
           }} />
-          {/* правая часть (положительное) */}
           <div style={{
             position: 'absolute',
             left: '50%',
