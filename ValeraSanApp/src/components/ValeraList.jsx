@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { api } from '../services/api';
+import { api, getUserRole, isAuthenticated } from '../services/api';
 
 const randomName = () => {
   const names = ['Valik', 'Vanya', 'Slava', 'Misha', 'Kolya', 'Oleg', 'Dima', 'Sasha', 'Aboba'];
@@ -12,10 +12,29 @@ export default function ValeraList() {
   const [search, setSearch] = useState('');
   const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
+  const userRole = getUserRole();
+  const isAdmin = userRole === 'Admin';
 
   useEffect(() => {
-    api.getValeras().then(setValeras);
+    if (!isAuthenticated()) {
+      navigate('/login');
+      return;
+    }
+    loadValeras();
   }, []);
+
+  const loadValeras = async () => {
+    try {
+      const data = isAdmin ? await api.getValeras() : await api.getMyValeras();
+      setValeras(data);
+    } catch (err) {
+      if (err.message.includes('403')) {
+        alert('Access denied');
+      } else {
+        alert('Failed to load valeras');
+      }
+    }
+  };
 
   const defaultValues = {
     health: 100,
@@ -40,7 +59,7 @@ export default function ValeraList() {
     };
     const name = randomName();
     await api.createValera({ name, state: randomValues });
-    api.getValeras().then(setValeras);
+    loadValeras();
   };
 
   const handleCreate = async (e) => {
@@ -53,13 +72,19 @@ export default function ValeraList() {
     setShowForm(false);
     setFormValues(defaultValues);
     form.reset();
-    api.getValeras().then(setValeras);
+    loadValeras();
   };
 
   const handleDelete = async (id, e) => {
     e.stopPropagation();
-    await api.deleteValera(id);
-    setValeras(prev => prev.filter(v => v.id !== id));
+    if (confirm('Are you sure you want to delete this Valera?')) {
+      try {
+        await api.deleteValera(id);
+        loadValeras();
+      } catch (err) {
+        alert(err.message);
+      }
+    }
   };
 
   const filtered = valeras.filter(v =>
@@ -126,7 +151,9 @@ export default function ValeraList() {
         fontSize: '28px',
         fontWeight: '700',
         textShadow: '1px 1px 4px rgba(0,0,0,0.3)'
-      }}>All Valeras</h2>
+      }}>
+        {isAdmin ? 'All Valeras (Admin)' : 'My Valeras'}
+      </h2>
 
       <div style={{
         display: 'flex',
@@ -229,6 +256,7 @@ export default function ValeraList() {
           >
             <span style={{ fontWeight: '600' }}>
               <strong>{v.name}</strong> — [❤️ {v.health}][🍺 {v.mana}][🙂 {v.happiness}][😴 {v.tiredness}][💲 {v.money}]
+              {isAdmin && <span style={{ fontSize: '12px', marginLeft: '12px', opacity: 0.8 }}>Owner: {v.userId}</span>}
             </span>
             <button
               type="button"

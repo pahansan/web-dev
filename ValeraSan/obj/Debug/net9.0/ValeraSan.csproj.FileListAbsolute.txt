@@ -156,3 +156,11 @@
 /home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
 /home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll
 /home/pahansan/code/web-dev/ValeraSan/obj/Debug/net9.0/ValeraSan.csproj.Up2Date
+/home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Microsoft.IdentityModel.Abstractions.dll
+/home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Microsoft.IdentityModel.Logging.dll
+/home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.dll
+/home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/Microsoft.IdentityModel.Tokens.dll
+/home/pahansan/code/web-dev/ValeraSan/bin/Debug/net9.0/System.IdentityModel.Tokens.Jwt.dll

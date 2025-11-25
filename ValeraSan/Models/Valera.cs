@@ -11,6 +11,10 @@ namespace ValeraSan.Models
         public int Tiredness { get; private set; }
         public int Money { get; private set; }
         public string Name { get; private set; }
+
+        public int UserId { get; set; }
+        public User User { get; set; } = null!;
+
         private const int MinHealth = 0;
         private const int MaxHealth = 100;
         private const int MinMana = 0;
@@ -20,37 +24,30 @@ namespace ValeraSan.Models
         private const int MinTiredness = 0;
         private const int MaxTiredness = 100;
 
-        public Valera(string name, int health, int mana, int happiness, int tiredness, int money)
+        public Valera(string name, int health, int mana, int happiness, int tiredness, int money, int userId)
         {
-            if (name == "")
+            if (string.IsNullOrWhiteSpace(name))
                 name = "Valera";
             Name = name;
+            UserId = userId;
+
             Health = 0;
-            if (health > 0)
-                UpHealth(health);
-            if (health < 0)
-                DownHealth(-health);
+            if (health > 0) UpHealth(health);
+            if (health < 0) DownHealth(-health);
             Mana = 0;
-            if (mana > 0)
-                UpMana(mana);
-            if (mana < 0)
-                DownMana(-mana);
+            if (mana > 0) UpMana(mana);
+            if (mana < 0) DownMana(-mana);
             Happiness = 0;
-            if (happiness > 0)
-                UpHappiness(happiness);
-            if (happiness < 0)
-                DownHappiness(-happiness);
+            if (happiness > 0) UpHappiness(happiness);
+            if (happiness < 0) DownHappiness(-happiness);
             Tiredness = 0;
-            if (tiredness > 0)
-                UpTiredness(tiredness);
-            if (tiredness < 0)
-                DownTiredness(-tiredness);
+            if (tiredness > 0) UpTiredness(tiredness);
+            if (tiredness < 0) DownTiredness(-tiredness);
             Money = 0;
-            if (money > 0)
-                UpMoney(money);
-            if (money < 0)
-                DownMoney(-money);
+            if (money > 0) UpMoney(money);
+            if (money < 0) DownMoney(-money);
         }
+
         private void DownHealth(int diff)
         {
             Health = Math.Max(MinHealth, Health - diff);

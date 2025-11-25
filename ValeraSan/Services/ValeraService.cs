@@ -19,26 +19,32 @@ namespace ValeraSan.Services
             return await _context.Valeras.FirstOrDefaultAsync(v => v.Id == id);
         }
 
+        public async Task<Valera?> GetValeraAsync(int id, int userId)
+        {
+            return await _context.Valeras
+                .FirstOrDefaultAsync(v => v.Id == id && v.UserId == userId);
+        }
+
         public async Task<List<Valera>> GetAllValerasAsync()
         {
             return await _context.Valeras.ToListAsync();
         }
 
-        public async Task<Valera> CreateValeraAsync(CreateRequest req)
+        public async Task<List<Valera>> GetValerasByUserIdAsync(int userId)
+        {
+            return await _context.Valeras
+                .Where(v => v.UserId == userId)
+                .ToListAsync();
+        }
+
+        public async Task<Valera> CreateValeraAsync(CreateRequest req, int userId)
         {
             var name = req.Name;
             var state = req.State;
-            var valera = new Valera(name, state.Health, state.Mana, state.Happiness, state.Tiredness, state.Money);
+            var valera = new Valera(name, state.Health, state.Mana, state.Happiness, state.Tiredness, state.Money, userId);
             _context.Valeras.Add(valera);
             await _context.SaveChangesAsync();
             return valera;
-        }
-
-        public async Task<bool> UpdateValeraAsync(Valera valera)
-        {
-            _context.Valeras.Update(valera);
-            await _context.SaveChangesAsync();
-            return true;
         }
 
         public async Task<bool> DeleteValeraAsync(int id)
@@ -66,6 +72,7 @@ namespace ValeraSan.Services
             await _context.SaveChangesAsync();
             return valera;
         }
+
         public async Task<Valera> DrinkWineAndWatchTVAsync(Valera valera)
         {
             valera.DrinkWineAndWatchTV();
